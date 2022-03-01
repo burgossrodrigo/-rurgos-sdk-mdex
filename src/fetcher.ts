@@ -1,6 +1,5 @@
 import { Contract } from '@ethersproject/contracts'
-import { getNetwork } from '@ethersproject/networks'
-import { getDefaultProvider } from '@ethersproject/providers'
+import { JsonRpcProvider } from '@ethersproject/providers'
 import { TokenAmount } from './entities/fractions/tokenAmount'
 import { Pair } from './entities/pair'
 import HecoPair from './abis/HokkfiPair.json'
@@ -34,7 +33,7 @@ export abstract class Fetcher {
   public static async fetchTokenData(
     chainId: ChainId,
     address: string,
-    provider = getDefaultProvider(getNetwork(chainId)),
+    provider = new JsonRpcProvider('https://http-mainnet.hecochain.com'),
     symbol?: string,
     name?: string
   ): Promise<Token> {
@@ -63,7 +62,7 @@ export abstract class Fetcher {
   public static async fetchPairData(
     tokenA: Token,
     tokenB: Token,
-    provider = getDefaultProvider(getNetwork(tokenA.chainId))
+    provider = new JsonRpcProvider('https://http-mainnet.hecochain.com')
   ): Promise<Pair> {
     invariant(tokenA.chainId === tokenB.chainId, 'CHAIN_ID')
     const address = Pair.getAddress(tokenA, tokenB)
